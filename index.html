@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elo Boost — Valorant rank yükseltme koçluğu</title>
+<style>
+:root {
+  --site-primary: #8B5CF6;
+  --site-secondary: #241442;
+  --site-background: #0B0714;
+  --site-on-primary: #FFFFFF;
+  --site-on-secondary: #F5EEFF;
+  --site-on-background: #F7F2FF;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { min-height: 100vh; width: 100%; border-radius: 0; overflow: hidden; background-color: light-dark(#F8F6FC, var(--site-background)); color: light-dark(#171024, var(--site-on-background)); }
+.site-header { background: var(--site-secondary); color: var(--site-on-secondary); border-bottom: 1px solid color-mix(in srgb, var(--site-primary) 35%, transparent); }
+.nav { max-width: 1160px; margin: auto; padding: calc(18px * var(--site-spacing-scale)) 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:-.04em; font-size:22px; }
+.brand-mark { width:34px; height:34px; display:grid; place-items:center; border-radius: calc(11px * var(--site-radius-scale)); background:var(--site-primary); color:white; font-weight:900; }
+.nav-links { display:flex; gap:24px; align-items:center; font-size:14px; color:var(--site-on-secondary); }
+a { color:inherit; text-decoration:none; }
+.btn { border:0; border-radius: calc(12px * var(--site-radius-scale)); padding:12px 17px; background:var(--site-primary); color:var(--site-on-primary); font-weight:800; cursor:pointer; font:inherit; transition:transform .18s, filter .18s; }
+.btn:hover { transform:translateY(-2px); filter:brightness(1.1); }
+.btn.secondary { background:transparent; border:1px solid color-mix(in srgb, var(--site-primary) 65%, transparent); color:inherit; }
+main { max-width:1160px; margin:auto; padding:0 24px 72px; }
+.hero { position:relative; padding:82px 0 66px; display:grid; grid-template-columns:1.15fr .85fr; align-items:center; gap:42px; }
+.hero:before { content:""; position:absolute; width:420px; height:420px; right:5%; top:8px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--site-primary) 26%, transparent), transparent 68%); opacity:var(--site-decoration-opacity); pointer-events:none; }
+.eyebrow { color:var(--site-primary); font-size:12px; font-weight:900; letter-spacing:.16em; text-transform:uppercase; }
+h1,h2,h3 { font-family:var(--site-font-heading); }
+h1 { font-size:calc(clamp(42px, 6vw, 68px) * var(--site-heading-scale)); line-height:1.02; letter-spacing:-.055em; margin:16px 0 18px; }
+.gradient { background:linear-gradient(100deg, var(--site-primary), #D8B4FE 70%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero p { color:light-dark(#5B5368, #BDB3CD); font-size:17px; line-height:1.7; max-width:570px; }
+.hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
+.hero-panel { position:relative; border:1px solid color-mix(in srgb, var(--site-primary) 35%, transparent); border-radius:calc(26px * var(--site-radius-scale)); padding:26px; background:light-dark(#FFFFFF, #171025); box-shadow:0 24px 80px #0003; }
+.rank-top { display:flex; justify-content:space-between; align-items:center; color:light-dark(#5B5368, #BDB3CD); font-size:13px; }
+.rank-emblem { width:100px; height:100px; margin:26px auto 18px; border-radius:50%; display:grid; place-items:center; font-size:42px; background:radial-gradient(circle at 35% 30%, #D8B4FE, var(--site-primary) 58%, #3B176C); box-shadow:0 0 45px color-mix(in srgb, var(--site-primary) 45%, transparent); }
+.rank-title { text-align:center; font-size:25px; font-weight:900; }
+.rank-sub { text-align:center; color:light-dark(#6C6478, #BDB3CD); font-size:13px; margin-top:5px; }
+.stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:25px; }
+.stat { background:light-dark(#F3EFFA, #211832); border-radius:12px; padding:13px 8px; text-align:center; }
+.stat strong { display:block; font-size:19px; }
+.stat span { font-size:11px; color:light-dark(#6C6478, #BDB3CD); }
+.section { padding:46px 0 12px; }
+.section-head { display:flex; justify-content:space-between; align-items:end; gap:18px; margin-bottom:22px; }
+h2 { font-size:calc(32px * var(--site-heading-scale)); letter-spacing:-.04em; margin:8px 0 0; }
+.muted { color:light-dark(#6C6478, #BDB3CD); line-height:1.6; }
+.game-grid,.service-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.game-grid { grid-template-columns:minmax(0, 1fr); }
+.game-card,.service-card { border:1px solid light-dark(#E5DDEC, #342647); background:light-dark(#FFFFFF, #171025); border-radius:calc(18px * var(--site-radius-scale)); padding:22px; }
+.game-icon { height:112px; border-radius:14px; display:grid; place-items:center; font-size:38px; font-weight:1000; margin-bottom:18px; background:linear-gradient(135deg, color-mix(in srgb, var(--site-primary) 40%, #211832), #211832); color:white; }
+.game-card h3,.service-card h3 { margin:0 0 8px; font-size:19px; }
+.game-card p,.service-card p { margin:0 0 18px; font-size:14px; }
+.card-link { color:var(--site-primary); font-weight:800; font-size:13px; cursor:pointer; background:none; border:0; padding:0; }
+.service-icon { width:44px; height:44px; display:grid; place-items:center; border-radius:13px; background:color-mix(in srgb, var(--site-primary) 18%, transparent); color:var(--site-primary); font-size:21px; margin-bottom:18px; }
+.notice { margin-top:28px; border:1px solid color-mix(in srgb, var(--site-primary) 40%, transparent); background:color-mix(in srgb, var(--site-primary) 9%, transparent); border-radius:16px; padding:18px 20px; font-size:13px; line-height:1.65; }
+.contact { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+form { background:light-dark(#FFFFFF, #171025); border:1px solid light-dark(#E5DDEC, #342647); padding:22px; border-radius:18px; }
+label { display:block; font-size:13px; font-weight:800; margin:12px 0 7px; }
+input,select,textarea { width:100%; padding:12px 13px; border-radius:10px; border:1px solid light-dark(#D9D0E4, #443456); background:light-dark(#FBFAFD, #100B1B); color:inherit; font:inherit; }
+textarea { min-height:90px; resize:vertical; }
+#form-message { min-height:22px; color:var(--site-primary); font-size:13px; margin-top:10px; }
+footer { background:var(--site-secondary); color:var(--site-on-secondary); padding:28px 24px; text-align:center; font-size:12px; }
+@media(max-width:760px) { .nav-links { display:none; } .hero { grid-template-columns:1fr; padding-top:55px; } .hero-panel { max-width:480px; } .game-grid,.service-grid { grid-template-columns:1fr; } .contact { grid-template-columns:1fr; } .section-head { align-items:start; flex-direction:column; } }
+</style>
+</head>
+<body>
+<div id="app">
+<header class="site-header"><nav class="nav"><a class="brand" href="#top"><span class="brand-mark">EB</span> ELO BOOST</a><div class="nav-links"><a href="#games">Oyunlar</a><a href="#services">Hizmetler</a><a href="#contact">İletişim</a></div><a class="btn" href="#contact">Teklif al</a></nav></header>
+<main id="top">
+<section class="hero"><div><div class="eyebrow">VALORANT RANK YÜKSELTME</div><h1>Rank atlamak için<br><span class="gradient">doğru çalışma.</span></h1><p>Valorant'ta daha istikrarlı maçlar çıkarmak ve hedef rankına yaklaşmak için birebir koçluk, maç analizi ve sana özel antrenman planı. Sen oyna, birlikte gelişelim.</p><div class="hero-actions"><a class="btn" href="#services">Rank hizmetlerini incele</a><a class="btn secondary" href="#contact">Hedef rankını paylaş</a></div></div>
+<div class="hero-panel"><div class="rank-top"><span>ELO BOOST / RANK PLAN</span><span>● READY</span></div><div class="rank-emblem">↑</div><div class="rank-title">RANK UP</div><div class="rank-sub">Daha iyi kararlar. Daha istikrarlı oyun.</div><div class="stat-row"><div class="stat"><strong>AIM</strong><span>Nişan</span></div><div class="stat"><strong>VOD</strong><span>Maç analizi</span></div><div class="stat"><strong>RR</strong><span>Rank hedefi</span></div></div></div></section>
+<section class="section" id="games"><div class="section-head"><div><div class="eyebrow">SADECE VALORANT</div><h2>Valorant dünyasına hoş geldin</h2></div><p class="muted">Rekabetin ve takım oyununun heyecanını yaşa.</p></div></section>
+<div class="notice"><strong>Elo Boost:</strong> Valorant tutkunları için hazırlanmış bağımsız bir topluluk sayfası.</div>
+</main><footer>© 2026 ELO BOOST · Bağımsız oyun gelişim platformu taslağı</footer>
+</div>
+<script>
+</script>
+</body>
+</html>
